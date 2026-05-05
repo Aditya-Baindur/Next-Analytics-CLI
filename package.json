@@ -1,0 +1,46 @@
+{
+  "name": "next-analytics-installer",
+  "version": "0.1.0",
+  "description": "Scaffold consent-aware Microsoft Clarity and/or Google Analytics for Next.js",
+  "keywords": [
+    "nextjs",
+    "analytics",
+    "google-analytics",
+    "microsoft-clarity",
+    "consent",
+    "app-router",
+    "cli"
+  ],
+  "homepage": "https://github.com/Aditya-Baindur/adityabaindur.dev/tree/main/next-analytics-installer#readme",
+  "bugs": {
+    "url": "https://github.com/Aditya-Baindur/adityabaindur.dev/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aditya-Baindur/adityabaindur.dev.git",
+    "directory": "next-analytics-installer"
+  },
+  "license": "MIT",
+  "author": "Aditya Baindur",
+  "type": "module",
+  "scripts": {
+    "check": "node --check bin/cli.mjs && npm test && npm pack --dry-run",
+    "prepublishOnly": "npm run check",
+    "test": "node --test"
+  },
+  "bin": {
+    "next-analytics-installer": "bin/cli.mjs"
+  },
+  "files": [
+    "bin",
+    "LICENSE",
+    "templates",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.17"
+  }
+}
