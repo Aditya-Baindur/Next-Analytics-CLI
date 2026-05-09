@@ -62,13 +62,12 @@ NEXT_PUBLIC_USE_ANALYTICS=true
 NEXT_PUBLIC_ANALYTICS_REGION_ENDPOINT=/api/region
 ```
 
-
 # Add more regions to show consent
 
-if you want to show the consent screens for other regions than these ones : 
+if you want to show the consent screens for other regions than these ones :
 
 `Austria, Belgium, Bulgaria, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, United Kingdom, Greece, Croatia, Hungary, Ireland, Iceland, Italy, Liechtenstein, Lithuania, Luxembourg, Latvia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Sweden, Slovenia, Slovakia.`
 
-You can follow the guide at : 
+You can follow the guide at :
 
-<p align="center" style="padding: 8px;"><a href="https://docs.byaditya.com/docs/dev/analytics/configs/regions"><img src="https://docs.byaditya.com/button/render?label=Dev&target=%2Fdocs%2Fdev%2Fanalytics%2Fconfigs%2Fregions&theme=dark&hideLabel=true" alt="Regions" /></a></p>
+<p align="center" style="padding: 8px;"><a href="https://docs.adityabaindur.dev/docs/dev/analytics/configs/regions"><img src="https://docs.adityabaindur.dev/button/render?label=Dev&target=%2Fdocs%2Fdev%2Fanalytics%2Fconfigs%2Fregions&theme=dark&hideLabel=true" alt="Regions" /></a></p>

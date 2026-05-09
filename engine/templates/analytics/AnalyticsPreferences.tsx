@@ -41,18 +41,25 @@ export function AnalyticsPreferences() {
       aria-labelledby="analytics-preferences"
       className="mt-10 rounded-lg border border-zinc-300 bg-white p-5"
     >
-      <h2 id="analytics-preferences" className="text-lg font-medium text-zinc-900">
+      <h2
+        id="analytics-preferences"
+        className="text-lg font-medium text-zinc-900"
+      >
         Analytics Preferences
       </h2>
 
       <div className="mt-4 space-y-2 text-sm text-zinc-700">
         <p>
           Current analytics choice:{' '}
-          <span className="font-medium text-zinc-900">{consentLabels[consent]}</span>
+          <span className="font-medium text-zinc-900">
+            {consentLabels[consent]}
+          </span>
         </p>
         <p>
           Region behavior:{' '}
-          <span className="font-medium text-zinc-900">{regionLabels[region]}</span>
+          <span className="font-medium text-zinc-900">
+            {regionLabels[region]}
+          </span>
         </p>
         <p>
           Detected region:{' '}

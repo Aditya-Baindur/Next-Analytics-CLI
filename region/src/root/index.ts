@@ -1,20 +1,20 @@
-import type { Route } from "@/root/_routes";
+import type { Route } from '@/root/_routes';
 
 function escapeHtml(value: unknown): string {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+	return String(value ?? '')
+		.replaceAll('&', '&amp;')
+		.replaceAll('<', '&lt;')
+		.replaceAll('>', '&gt;')
+		.replaceAll('"', '&quot;')
+		.replaceAll("'", '&#039;');
 }
 
 function escapeAttr(value: unknown): string {
-  return escapeHtml(value);
+	return escapeHtml(value);
 }
 
 export function rootPage(routes: Route[]): Response {
-  const html = `
+	const html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,14 +68,14 @@ body {
 
   <div id="routes" class="space-y-2 text-sm">
     ${
-      routes.length > 0
-        ? routes
-            .map((route) => {
-              const method = escapeAttr(route.method);
-              const path = escapeAttr(route.path);
-              const description = escapeAttr(route.description ?? "");
+			routes.length > 0
+				? routes
+						.map((route) => {
+							const method = escapeAttr(route.method);
+							const path = escapeAttr(route.path);
+							const description = escapeAttr(route.description ?? '');
 
-              return `
+							return `
       <button
         type="button"
         data-method="${method.toLowerCase()}"
@@ -104,14 +104,14 @@ body {
         </span>
       </button>
     `;
-            })
-            .join("")
-        : `
+						})
+						.join('')
+				: `
       <div class="border border-neutral-800 px-3 py-4 text-sm text-neutral-500">
         No routes registered.
       </div>
     `
-    }
+		}
   </div>
 
 </div>
@@ -197,9 +197,9 @@ lucide.createIcons();
 </html>
   `;
 
-  return new Response(html, {
-    headers: {
-      "Content-Type": "text/html;charset=UTF-8",
-    },
-  });
+	return new Response(html, {
+		headers: {
+			'Content-Type': 'text/html;charset=UTF-8',
+		},
+	});
 }

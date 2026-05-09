@@ -156,78 +156,83 @@ function dispatchConsentChange() {
   window.dispatchEvent(new Event('analytics-consent-change'))
 }
 
-export const useAnalyticsConsent = create<AnalyticsConsentStore>((set, get) => ({
-  consent: 'unknown',
-  region: 'unknown',
-  detectedRegion: null,
+export const useAnalyticsConsent = create<AnalyticsConsentStore>(
+  (set, get) => ({
+    consent: 'unknown',
+    region: 'unknown',
+    detectedRegion: null,
 
-  setConsent: (value) => {
-    if (typeof window === 'undefined') return
+    setConsent: (value) => {
+      if (typeof window === 'undefined') return
 
-    try {
-      if (value === 'unknown') {
-        localStorage.removeItem(STORAGE_KEY)
-        localStorage.removeItem(STORAGE_SOURCE_KEY)
-      } else {
-        localStorage.setItem(STORAGE_KEY, value)
-        localStorage.setItem(STORAGE_SOURCE_KEY, EXPLICIT_CONSENT_SOURCE)
-      }
-
-      set({ consent: value })
-      dispatchConsentChange()
-    } catch {
-      set({ consent: value })
-    }
-  },
-
-  hydrate: () => {
-    if (typeof window === 'undefined') return
-
-    try {
-      const cookieRegion = readConsentRegion()
-      const stored = readStoredConsent()
-
-      set({
-        consent: stored ?? 'unknown',
-        region: 'unknown',
-        detectedRegion: null,
-      })
-
-      const applyRegion = (
-        region: ConsentRegion,
-        detectedRegion: DetectedRegion | null
-      ) => {
-        const currentConsent = readStoredConsent() ?? get().consent
-
-        if (currentConsent === 'granted' || currentConsent === 'denied') {
-          set({ consent: currentConsent, region, detectedRegion })
-          return
+      try {
+        if (value === 'unknown') {
+          localStorage.removeItem(STORAGE_KEY)
+          localStorage.removeItem(STORAGE_SOURCE_KEY)
+        } else {
+          localStorage.setItem(STORAGE_KEY, value)
+          localStorage.setItem(STORAGE_SOURCE_KEY, EXPLICIT_CONSENT_SOURCE)
         }
 
-        if (isLocalAnalyticsHost(window.location.hostname)) {
+        set({ consent: value })
+        dispatchConsentChange()
+      } catch {
+        set({ consent: value })
+      }
+    },
+
+    hydrate: () => {
+      if (typeof window === 'undefined') return
+
+      try {
+        const cookieRegion = readConsentRegion()
+        const stored = readStoredConsent()
+
+        set({
+          consent: stored ?? 'unknown',
+          region: 'unknown',
+          detectedRegion: null,
+        })
+
+        const applyRegion = (
+          region: ConsentRegion,
+          detectedRegion: DetectedRegion | null
+        ) => {
+          const currentConsent = readStoredConsent() ?? get().consent
+
+          if (currentConsent === 'granted' || currentConsent === 'denied') {
+            set({ consent: currentConsent, region, detectedRegion })
+            return
+          }
+
+          if (isLocalAnalyticsHost(window.location.hostname)) {
+            set({ consent: 'unknown', region, detectedRegion })
+            return
+          }
+
+          if (region === 'not-required') {
+            set({ consent: 'granted', region, detectedRegion })
+            dispatchConsentChange()
+            return
+          }
+
           set({ consent: 'unknown', region, detectedRegion })
-          return
         }
 
-        if (region === 'not-required') {
-          set({ consent: 'granted', region, detectedRegion })
-          dispatchConsentChange()
-          return
-        }
+        void resolveRegion().then((resolvedRegion) => {
+          if (resolvedRegion) {
+            applyRegion(
+              resolvedRegion.consentRegion,
+              resolvedRegion.detectedRegion
+            )
+            return
+          }
 
-        set({ consent: 'unknown', region, detectedRegion })
+          applyRegion(cookieRegion, null)
+        })
+      } catch {
+        set({ consent: 'unknown' })
       }
-
-      void resolveRegion().then((resolvedRegion) => {
-        if (resolvedRegion) {
-          applyRegion(resolvedRegion.consentRegion, resolvedRegion.detectedRegion)
-          return
-        }
-
-        applyRegion(cookieRegion, null)
-      })
-    } catch {
-      set({ consent: 'unknown' })
-    }
-  },
-}))
+    },
+  })
+)

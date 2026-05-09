@@ -11,7 +11,9 @@ export function AnalyticsToggle() {
   const analyticsEnabled = useAnalytics !== 'false'
 
   useEffect(() => {
-    setVisible(analyticsEnabled && region === 'required' && consent === 'unknown')
+    setVisible(
+      analyticsEnabled && region === 'required' && consent === 'unknown'
+    )
   }, [analyticsEnabled, consent, region])
 
   if (!visible) return null

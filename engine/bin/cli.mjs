@@ -228,7 +228,9 @@ function selectedProvidersFromChoice(choice) {
 }
 
 function formatProviderLabels(selectedProviders) {
-  return selectedProviders.map((provider) => PROVIDER_LABELS[provider]).join(', ')
+  return selectedProviders
+    .map((provider) => PROVIDER_LABELS[provider])
+    .join(', ')
 }
 
 function getRequiredDependencies(selectedProviders) {
@@ -339,7 +341,9 @@ function installDependencies(projectRoot, packageManager) {
   }
 
   if (result.status !== 0) {
-    throw new Error(`${installCommand.display} exited with code ${result.status}`)
+    throw new Error(
+      `${installCommand.display} exited with code ${result.status}`
+    )
   }
 
   return installCommand.display
@@ -378,12 +382,17 @@ function buildLayoutElements(selectedProviders) {
     ...selectedProviders.map(
       (provider) => PROVIDER_LAYOUT_COMPONENTS[provider].element
     ),
-    SHARED_LAYOUT_COMPONENTS.find((item) => item.identifier === 'AnalyticsToggle')
-      .element,
+    SHARED_LAYOUT_COMPONENTS.find(
+      (item) => item.identifier === 'AnalyticsToggle'
+    ).element,
   ]
 }
 
-function upsertLayout(layoutSource, selectedProviders, analyticsImportBasePath) {
+function upsertLayout(
+  layoutSource,
+  selectedProviders,
+  analyticsImportBasePath
+) {
   let output = layoutSource
   const providerOpen = '<AnalyticsConsentProvider>'
   const providerClose = '</AnalyticsConsentProvider>'
@@ -436,7 +445,9 @@ function upsertLayout(layoutSource, selectedProviders, analyticsImportBasePath) 
     return output
   }
 
-  const missingComponents = desiredElements.filter((line) => !output.includes(line))
+  const missingComponents = desiredElements.filter(
+    (line) => !output.includes(line)
+  )
 
   if (missingComponents.length === 0) {
     return output
@@ -445,7 +456,9 @@ function upsertLayout(layoutSource, selectedProviders, analyticsImportBasePath) 
   const closeIndex = output.indexOf(providerClose)
   const beforeClose = output.slice(0, closeIndex)
   const afterClose = output.slice(closeIndex)
-  const indentMatch = beforeClose.match(/^(\s*)<AnalyticsConsentProvider(?:\s|>)?.*$/m)
+  const indentMatch = beforeClose.match(
+    /^(\s*)<AnalyticsConsentProvider(?:\s|>)?.*$/m
+  )
   const indent = indentMatch ? `${indentMatch[1]}  ` : '          '
   const insert = `\n${missingComponents.map((line) => `${indent}${line}`).join('\n')}`
 
@@ -515,7 +528,9 @@ function upsertProxy(proxySource) {
 function getTemplateFiles(selectedProviders) {
   return [
     ...COMMON_TEMPLATE_FILES,
-    ...selectedProviders.flatMap((provider) => PROVIDER_TEMPLATE_FILES[provider]),
+    ...selectedProviders.flatMap(
+      (provider) => PROVIDER_TEMPLATE_FILES[provider]
+    ),
   ]
 }
 
@@ -708,7 +723,10 @@ async function resolveInteractiveOptions({
     }
 
     const selectedProviders = selectedProvidersFromChoice(options.analytics)
-    const existingFiles = getExistingTemplateFiles(analyticsRoot, selectedProviders)
+    const existingFiles = getExistingTemplateFiles(
+      analyticsRoot,
+      selectedProviders
+    )
 
     if (!args.force && existingFiles.length > 0) {
       options.force = await promptConfirm(
@@ -724,7 +742,10 @@ async function resolveInteractiveOptions({
       )
     }
 
-    const missingDependencies = getMissingDependencies(projectRoot, selectedProviders)
+    const missingDependencies = getMissingDependencies(
+      projectRoot,
+      selectedProviders
+    )
 
     if (args.install == null && missingDependencies.length > 0) {
       options.install = await promptConfirm(
@@ -791,14 +812,20 @@ async function main() {
   }
 
   const projectRoot = args.project
-  const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+  const packageRoot = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    '..'
+  )
   const templatesRoot = path.join(packageRoot, 'templates', 'analytics')
 
   if (!fileExists(path.join(projectRoot, 'package.json'))) {
     throw new Error(`Could not find package.json in ${projectRoot}`)
   }
 
-  const analyticsRoot = path.join(resolveAnalyticsTargetRoot(projectRoot), 'analytics')
+  const analyticsRoot = path.join(
+    resolveAnalyticsTargetRoot(projectRoot),
+    'analytics'
+  )
   const detectedPackageManager = detectPackageManager(projectRoot)
   const options = await resolveInteractiveOptions({
     args,
@@ -830,7 +857,9 @@ async function main() {
 
   const output = []
   output.push('next-analytics-installer complete')
-  output.push(`- selected analytics: ${formatProviderLabels(selectedProviders)}`)
+  output.push(
+    `- selected analytics: ${formatProviderLabels(selectedProviders)}`
+  )
   output.push(
     `- package manager: ${options.packageManager} (${args.packageManager ? 'manual override' : detectedPackageManager.source})`
   )
@@ -840,9 +869,13 @@ async function main() {
   if (layoutResult.skipped) {
     output.push('- layout.tsx: skipped')
   } else if (!layoutResult.found) {
-    output.push('- layout.tsx not found (expected src/app/layout.tsx or app/layout.tsx)')
+    output.push(
+      '- layout.tsx not found (expected src/app/layout.tsx or app/layout.tsx)'
+    )
   } else {
-    output.push(`- layout.tsx updated: ${layoutResult.updated ? 'yes' : 'no changes needed'}`)
+    output.push(
+      `- layout.tsx updated: ${layoutResult.updated ? 'yes' : 'no changes needed'}`
+    )
   }
 
   if (proxyResult.skipped) {
