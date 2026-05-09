@@ -71,3 +71,4 @@ if you want to show the consent screens for other regions than these ones :
 
 You can follow the guide at : 
 
+<p align="center" style="padding: 8px;"><a href="https://docs.byaditya.com/docs/dev/analytics/configs/regions"><img src="https://docs.byaditya.com/button/render?label=Dev&target=%2Fdocs%2Fdev%2Fanalytics%2Fconfigs%2Fregions&theme=dark&hideLabel=true" alt="Regions" /></a></p>
