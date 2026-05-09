@@ -2,6 +2,8 @@
 
 Scaffolds consent-aware Microsoft Clarity and/or Google Analytics for a Next.js App Router project.
 
+The implementation now lives under `engine/`. The published CLI still works from the package root as `next-analytics-installer`.
+
 ## What it does
 
 - interactively lets you install Microsoft Clarity, Google Analytics, or both
@@ -20,6 +22,8 @@ npx next-analytics-installer init
 ```
 
 The default flow is interactive in a terminal. In non-interactive environments, it defaults to both providers and does not run dependency installation.
+
+If you are working in the repository itself, the CLI source and templates are under `engine/`.
 
 Examples:
 
@@ -57,20 +61,3 @@ NEXT_PUBLIC_USE_GA=true
 NEXT_PUBLIC_USE_ANALYTICS=true
 NEXT_PUBLIC_ANALYTICS_REGION_ENDPOINT=/api/region
 ```
-
-## Publishing
-
-Before publishing, verify the package:
-
-```bash
-npm run check
-```
-
-Publish publicly:
-
-```bash
-npm login
-npm publish --access public
-```
-
-If `next-analytics-installer` is already taken on npm, rename the package in `package.json` or use a scoped name like `@your-scope/next-analytics-installer` before publishing.

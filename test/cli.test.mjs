@@ -10,7 +10,7 @@ const packageRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '..'
 )
-const cliPath = path.join(packageRoot, 'bin/cli.mjs')
+const engineCliPath = path.join(packageRoot, 'engine/bin/cli.mjs')
 
 function writeFile(filePath, content) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true })
@@ -49,10 +49,18 @@ function makeProject({ layout, lockfile } = {}) {
   return projectRoot
 }
 
-function runCli(projectRoot, args = []) {
+function runEngineCli(projectRoot, args = []) {
   return execFileSync(
     process.execPath,
-    [cliPath, 'init', '--project', projectRoot, '--yes', '--no-install', ...args],
+    [
+      engineCliPath,
+      'init',
+      '--project',
+      projectRoot,
+      '--yes',
+      '--no-install',
+      ...args,
+    ],
     { encoding: 'utf8' }
   )
 }
@@ -61,7 +69,7 @@ test('scaffolds Google Analytics without Clarity', (t) => {
   const projectRoot = makeProject({ lockfile: 'pnpm-lock.yaml' })
   t.after(() => fs.rmSync(projectRoot, { recursive: true, force: true }))
 
-  const output = runCli(projectRoot, ['--analytics', 'ga'])
+  const output = runEngineCli(projectRoot, ['--analytics', 'ga'])
   const packageJson = JSON.parse(
     fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8')
   )
@@ -115,7 +123,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   })
   t.after(() => fs.rmSync(projectRoot, { recursive: true, force: true }))
 
-  runCli(projectRoot, ['--analytics', 'both'])
+  runEngineCli(projectRoot, ['--analytics', 'both'])
   const layout = fs.readFileSync(
     path.join(projectRoot, 'src/app/layout.tsx'),
     'utf8'
@@ -140,5 +148,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   assert.equal(
     (layout.match(/@\/components\/analytics\/AnalyticsToggle/g) ?? []).length,
     1
+  )
+})
+
+test('engine entrypoint works from the repository root', (t) => {
+  const projectRoot = makeProject({ lockfile: 'pnpm-lock.yaml' })
+  t.after(() => fs.rmSync(projectRoot, { recursive: true, force: true }))
+
+  const output = runEngineCli(projectRoot, ['--analytics', 'clarity'])
+
+  assert.match(output, /selected analytics: Microsoft Clarity/)
+  assert.match(output, /package manager: pnpm/)
+  assert.equal(
+    fs.existsSync(
+      path.join(projectRoot, 'src/components/analytics/ClarityConsent.tsx')
+    ),
+    true
   )
 })

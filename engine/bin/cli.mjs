@@ -559,7 +559,7 @@ function ensureProxy(projectRoot, templatesDir) {
   const proxyTemplatePath = path.join(templatesDir, 'proxy.ts')
 
   if (!fileExists(proxyPath)) {
-    const fallbackTemplate = `import { NextResponse } from 'next/server'\nimport type { NextRequest } from 'next/server'\n\n${PROXY_HELPER_BLOCK}\nexport function proxy(req: NextRequest) {\n  const response = NextResponse.next()\n\n  response.cookies.set(ANALYTICS_REGION_COOKIE, getConsentRegion(req), {\n    maxAge: 60 * 60 * 24 * 30,\n    path: '/',\n    sameSite: 'lax',\n    secure: req.nextUrl.protocol === 'https:',\n  })\n\n  return response\n}\n\nexport const config = {\n  matcher: [\n    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)',\n  ],\n}\n`
+    const fallbackTemplate = `import { NextResponse } from 'next/server'\nimport type { NextRequest } from 'next/server'\n\n${PROXY_HELPER_BLOCK}export function proxy(req: NextRequest) {\n  const response = NextResponse.next()\n\n  response.cookies.set(ANALYTICS_REGION_COOKIE, getConsentRegion(req), {\n    maxAge: 60 * 60 * 24 * 30,\n    path: '/',\n    sameSite: 'lax',\n    secure: req.nextUrl.protocol === 'https:',\n  })\n\n  return response\n}\n\nexport const config = {\n  matcher: [\n    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)',\n  ],\n}\n`
 
     if (fileExists(proxyTemplatePath)) {
       writeText(proxyPath, readText(proxyTemplatePath))
@@ -878,6 +878,6 @@ try {
 
   await main()
 } catch (error) {
-  process.stderr.write(`next-analytics-installer failed: ${error.message}\n`)
+  process.stdout.write(`next-analytics-installer failed: ${error.message}\n`)
   process.exit(1)
 }
