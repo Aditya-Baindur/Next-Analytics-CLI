@@ -61,3 +61,13 @@ NEXT_PUBLIC_USE_GA=true
 NEXT_PUBLIC_USE_ANALYTICS=true
 NEXT_PUBLIC_ANALYTICS_REGION_ENDPOINT=/api/region
 ```
+
+
+# Add more regions to show consent
+
+if you want to show the consent screens for other regions than these ones : 
+
+`Austria, Belgium, Bulgaria, Switzerland, Cyprus, Czechia, Germany, Denmark, Estonia, Spain, Finland, France, United Kingdom, Greece, Croatia, Hungary, Ireland, Iceland, Italy, Liechtenstein, Lithuania, Luxembourg, Latvia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Sweden, Slovenia, Slovakia.`
+
+You can follow the guide at : 
+
